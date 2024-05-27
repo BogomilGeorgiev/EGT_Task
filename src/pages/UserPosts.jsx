@@ -5,43 +5,60 @@ import { useDispatch, useSelector } from "react-redux";
 
 import LinkButton from "../ui/LinkButton";
 import { useEffect } from "react";
-import { fetchPosts } from "../features/posts/postsSlice";
+import {
+  fetchPosts,
+  getFetchPostsStatus,
+  getPosts,
+  getPostsError,
+} from "../features/posts/postsSlice";
 import Loader from "../ui/Loader";
+import { fetchUsers, getUsersStatus } from "../features/users/usersSlice";
+import { stateStatuses } from "../constants";
 
 function UserPosts() {
-  // to add the getSelectors in the postsSlice
-
   const { userId } = useParams();
   const dispatch = useDispatch();
-  const posts = useSelector((state) => state.posts.posts);
-  const status = useSelector((state) => state.posts.status);
-  const error = useSelector((state) => state.posts.error);
+  const posts = useSelector(getPosts);
+  const postsStatus = useSelector(getFetchPostsStatus);
+  const usersStatus = useSelector(getUsersStatus);
+  const error = useSelector(getPostsError);
 
   const user = useSelector((state) =>
     state.users.users.find((user) => user.id === Number(userId))
   );
 
   useEffect(() => {
-    if (status === "idle") {
+    if (postsStatus === stateStatuses.IDLE) {
       dispatch(fetchPosts(userId));
     }
-  }, [dispatch, userId, status]);
+  }, [dispatch, userId, postsStatus]);
 
-  if (status === "loading") {
+  useEffect(() => {
+    if (usersStatus === stateStatuses.IDLE) {
+      dispatch(fetchUsers());
+    }
+  }, [dispatch, usersStatus]);
+
+  if (postsStatus === stateStatuses.LOADING || !user) {
     return <Loader />;
   }
 
-  if (status === "failed") {
+  if (postsStatus === stateStatuses.REJECTED) {
     return <div>Error occured: {error}</div>;
   }
 
   return (
-    <div>
-      <div className="flex">
+    <div className="p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 space-y-2 sm:space-y-0 sm:space-x-2">
         <LinkButton to="-1">&larr; Go back</LinkButton>
+        <LinkButton to="/tasks">Tasks Page &rarr;</LinkButton>
       </div>
-      <User user={user} />
-      <Posts posts={posts} />
+      <div className="mb-4">
+        <User user={user} />
+      </div>
+      <div className="mb-4">
+        <Posts posts={posts} />
+      </div>
     </div>
   );
 }

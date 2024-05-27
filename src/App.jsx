@@ -1,8 +1,6 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import "./App.css";
 import AppLayout from "./ui/AppLayout";
 import Tasks from "./pages/Tasks";
-// import UsersList from "./pages/UsersList";
 import UserPosts from "./pages/UserPosts";
 import Users from "./pages/Users";
 

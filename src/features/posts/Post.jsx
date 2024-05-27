@@ -11,8 +11,7 @@ function Post({ post }) {
     setEditedPost({ ...editedPost, [name]: value });
   };
 
-  const handleUpdatePost = (e) => {
-    e.preventDefault();
+  const handleUpdatePost = () => {
     dispatch(updatePost(editedPost));
   };
 
@@ -23,26 +22,26 @@ function Post({ post }) {
   };
 
   return (
-    <li className="list-none border-2 w-[800px] mx-auto">
-      <div>
-        <h2 className="text-xl font-semibold">Title:</h2>
+    <li className="list-none border-2 w-full mx-auto max-w-3xl p-4">
+      <div className="mb-4">
+        <h2 className="text-lg sm:text-xl font-semibold mb-2">Title:</h2>
         <input
           type="text"
           name="title"
           value={editedPost.title}
-          className="w-[550px] max-w-[800px] border-b-2 border-sky-300 text-center"
+          className="input w-full border-b-2 mb-4 p-3 border-sky-300 text-start sm:text-center"
           onChange={handleChangePost}
         />
-        <h2 className="text-xl font-semibold">Body:</h2>
+        <h2 className="text-lg sm:text-xl font-semibold mb-2">Body:</h2>
         <textarea
           type="text"
           name="body"
           value={editedPost.body}
-          className="w-[550px] max-w-[800px] h-[200px]"
+          className="w-full h-[150px] text-center sm:h-[200px] p-2"
           onChange={handleChangePost}
         />
       </div>
-      <div className="flex justify-between px-4 py-3">
+      <div className="flex flex-col sm:flex-row justify-between px-4 py-3 space-y-2 sm:space-y-0 sm:space-x-2">
         <button
           onClick={handleDelete}
           className="border-2 border-black p-1 rounded-md hover:bg-red-300 cursor-pointer disabled:cursor-not-allowed"

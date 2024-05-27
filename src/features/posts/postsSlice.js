@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
+import { stateStatuses } from "../../constants";
 
 const POSTS_URL = 'https://jsonplaceholder.typicode.com/posts'
 
@@ -11,21 +12,19 @@ export const fetchPosts = createAsyncThunk('posts/fetchPosts', async (userId) =>
 
 export const updatePost = createAsyncThunk('posts/updatePost', async (post) => {
     const res = await axios.put(`https://jsonplaceholder.typicode.com/posts/${post.id}`, post);
-    // return null ? 
     return res.data;
 })
 
 export const deletePost = createAsyncThunk('posts/deletePost', async (postId) => {
     await axios.delete(`${POSTS_URL}/${postId}`);
-    // return null ? 
     return postId;
 })
 
 const initialState = {
     posts: [],
-    status: 'idle',
-    updateStatus: 'idle',
-    deleteStatus: 'idle',
+    status: stateStatuses.IDLE,
+    updateStatus: stateStatuses.IDLE,
+    deleteStatus: stateStatuses.IDLE,
     error: null
 }
 
@@ -35,46 +34,57 @@ const postsSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder.addCase(fetchPosts.pending, (state) => {
-            state.status = 'loading';
+            state.status = stateStatuses.LOADING;
         })
             .addCase(fetchPosts.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                //data = action.payload
+                state.status = stateStatuses.SUCCEEDED;
                 state.posts = action.payload;
             })
             .addCase(fetchPosts.rejected, (state, action) => {
-                state.status = 'failed'
+                state.status = stateStatuses.REJECTED;
                 state.error = action.error.message;
             })
-            // to add pending and rejected status
             .addCase(updatePost.pending, (state) => {
-                state.updateStatus = 'loading';
+                state.updateStatus = stateStatuses.LOADING;
             })
             .addCase(updatePost.fulfilled, (state, action) => {
-                state.updateStatus = 'succeeded';
+                state.updateStatus = stateStatuses.SUCCEEDED;
 
                 const index = state.posts.findIndex(post => post.id === action.payload.id);
                 state.posts[index] = action.payload;
 
             })
             .addCase(updatePost.rejected, (state, action) => {
-                state.updateStatus = 'failed';
+                state.updateStatus = stateStatuses.REJECTED;
                 state.error = action.error.message;
             })
             .addCase(deletePost.pending, (state) => {
-                state.deleteStatus = 'loading';
+                state.deleteStatus = stateStatuses.LOADING;
             })
             .addCase(deletePost.fulfilled, (state, action) => {
                 state.posts = state.posts.filter((post) => post.id !== action.payload);
-                state.deleteStatus = 'succeded';
+                state.deleteStatus = stateStatuses.SUCCEEDED;
 
             })
             .addCase(deletePost.rejected, (state, action) => {
-                state.deleteStatus = 'failed';
+                state.deleteStatus = stateStatuses.REJECTED;
                 state.error = action.error.message;
             })
 
     }
 })
+
+export const getPosts = (state) => state.posts.posts;
+
+export const getFetchPostsStatus = (state) => state.posts.status;
+
+export const getUpdatePostStatus = (state) => state.posts.updateStatus;
+
+export const getDeletePostStatus = (state) => state.posts.deleteStatus;
+
+export const getPostsError = (state) => state.posts.error;
+
+
+
 
 export default postsSlice.reducer;

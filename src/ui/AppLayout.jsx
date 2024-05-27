@@ -4,13 +4,13 @@ import Loader from "./Loader";
 function AppLayout() {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
-
+  // check if px and py are needed
   return (
-    <div className="flex align-middle">
+    <div className="flex flex-col min-h-screen items-center justify-center">
       {isLoading && <Loader />}
 
-      <div className="mx-auto">
-        <main className="">
+      <div className="w-full mx-auto sm:w-11/12 md:w-10/12 lg:w-8/12 px-4">
+        <main className="py-4">
           <Outlet />
         </main>
       </div>

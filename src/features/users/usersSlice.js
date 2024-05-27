@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import { stateStatuses } from "../../constants";
 
 const USERS_URL = 'https://jsonplaceholder.typicode.com/users'
 
@@ -13,13 +14,12 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async () => {
 
 const initialState = {
     users: [],
-    status: 'idle',
+    status: stateStatuses.IDLE,
     error: null
 }
 
 
-
-const userSlice = createSlice({
+const usersSlice = createSlice({
     name: 'users',
     initialState,
     reducers: {
@@ -33,7 +33,6 @@ const userSlice = createSlice({
             }
         },
         revertToOriginal: (state, action) => {
-            // id and originalData = action.payload, 
             const { id, originalData } = action.payload;
             const index = state.users.findIndex(user => user.id === id);
             if (index !== -1) {
@@ -44,22 +43,27 @@ const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchUsers.pending, (state) => {
-            state.status = 'loading';
+            state.status = stateStatuses.LOADING;
         })
             .addCase(fetchUsers.fulfilled, (state, action) => {
-                state.status = 'succeeded';
-                //data = action.payload
+                state.status = stateStatuses.SUCCEEDED;
                 state.users = action.payload;
             })
             .addCase(fetchUsers.rejected, (state, action) => {
-                state.status = 'failed'
+                state.status = stateStatuses.REJECTED;
                 state.error = action.error.message;
             })
     }
 
 })
 
-export const { updateUserData, revertToOriginal } = userSlice.actions;
+export const { updateUserData, revertToOriginal } = usersSlice.actions;
+
+export const getUsers = (state) => state.users.users;
+
+export const getUsersStatus = (state) => state.users.status;
+
+export const getUsersError = (state) => state.users.error;
 
 
-export default userSlice.reducer;
+export default usersSlice.reducer;

@@ -1,20 +1,18 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
 import axios from "axios";
+import { stateStatuses } from "../../constants";
 
 const TASKS_URL = 'https://jsonplaceholder.typicode.com/todos'
 
 export const fetchTasks = createAsyncThunk('tasks/fetchTasks', async () => {
     const res = await axios.get(TASKS_URL);
     const { data } = res;
-    console.log(data);
     return data;
 })
 
-
-
 const initialState = {
     tasks: [],
-    status: 'idle',
+    status: stateStatuses.IDLE,
     error: null
 
 }
@@ -24,30 +22,36 @@ const tasksSlice = createSlice({
     initialState,
     reducers: {
         updateTaskStatus: (state, action) => {
-            const task = state.tasks.find(task => task.id === action.payload.id);
-            if (task) task.completed = action.payload.completed;
+            const { id, completed } = action.payload;
+            const task = state.tasks.find(task => task.id === id);
+            if (task) task.completed = completed;
 
         }
     },
     extraReducers: (builder) => {
         builder.addCase(fetchTasks.pending, (state) => {
-
-            state.status = 'loading';
+            state.status = stateStatuses.LOADING;
 
         })
             .addCase(fetchTasks.fulfilled, (state, action) => {
                 state.tasks = action.payload;
-                state.status = 'succeded';
+                state.status = stateStatuses.SUCCEEDED;
 
 
             })
             .addCase(fetchTasks.rejected, (state, action) => {
-                state.status = 'failed';
+                state.status = stateStatuses.REJECTED;
                 state.error = action.error.message;
             })
     }
 })
 
 export const { updateTaskStatus } = tasksSlice.actions;
+
+export const getTasks = (state) => state.tasks.tasks;
+
+export const getTasksStatus = (state) => state.tasks.status;
+
+export const getTasksError = (state) => state.tasks.error;
 
 export default tasksSlice.reducer;

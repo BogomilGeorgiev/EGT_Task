@@ -8,7 +8,7 @@ function Task({ task, handleStatus }) {
       </td>
       <td className="px-4 py-2 border-b">
         <button
-          className={`font-semibold w-40 h-16 px-2 py-2 bg-sky-200 rounded-2xl whitespace-pre-wrap flex items-center justify-center ${
+          className={`font-semibold w-auto sm:w-40 h-12 sm:h-16 px-2 py-2 bg-sky-200 rounded-2xl whitespace-pre-wrap flex items-center justify-center ${
             task.completed
               ? "bg-green-500 hover:bg-red-500"
               : "bg-red-500 hover:bg-green-500"

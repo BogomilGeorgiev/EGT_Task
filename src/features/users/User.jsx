@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { revertToOriginal, updateUserData } from "./userSlice";
+import { revertToOriginal, updateUserData } from "./usersSlice";
 
 function User({ user }) {
   const dispatch = useDispatch();
@@ -26,8 +26,6 @@ function User({ user }) {
       if (!editUser.address.suite) errorsObj.suite = "Suite is required";
       if (!editUser.address.city) errorsObj.city = "City is required";
       setErrors(errorsObj);
-      // this row is not needed I think => to be rechecked
-      //   setIsDisabled(Object.keys(errorsObj).length > 0);
     }
 
     checkForErrors();
@@ -48,7 +46,8 @@ function User({ user }) {
   }
 
   function handleSubmit() {
-    if (Object.keys(errors).length > 0) return;
+    if (Object.keys(errors).length > 0)
+      return alert("All fields are mandatory!");
     dispatch(updateUserData({ id: user.id, data: editUser }));
     setIsDisabled(false);
   }
@@ -60,7 +59,7 @@ function User({ user }) {
   }
 
   return (
-    <div className="flex flex-col gap-3 border-2 p-2 m-3 w-[800px] max-h-[400px]">
+    <div className="flex flex-col gap-3 border-2 p-2 m-3 w-full max-h-[600px] max-w-3xl">
       <div
         onClick={isPostsPage ? null : () => setIsOpen(!isOpen)}
         className="border-b-4 p-3"
@@ -70,7 +69,7 @@ function User({ user }) {
       {isOpen && (
         <>
           <div className="flex flex-wrap justify-around gap-2">
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-1/2 lg:w-1/3">
               <label className="font-semibold" htmlFor="username">
                 Username:
               </label>
@@ -103,7 +102,7 @@ function User({ user }) {
                 <span className="text-red-500">{errors.email}</span>
               )}
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-1/2 lg:w-1/3">
               <label className="font-semibold">Street:</label>
               <input
                 className="input pl-2 text-center"
@@ -132,7 +131,7 @@ function User({ user }) {
                 <span className="text-red-500">{errors.suite}</span>
               )}
             </div>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-2 w-full sm:w-1/2 lg:w-1/3">
               <label className="font-semibold" htmlFor="city">
                 City:
               </label>
@@ -150,7 +149,7 @@ function User({ user }) {
               )}
             </div>
           </div>
-          <div className="flex justify-between px-4 py-3">
+          <div className="flex flex-col sm:flex-row sm:space-y-0 sm:space-x-2 space-y-2 justify-between px-4 py-3">
             <button
               onClick={handleRevertToOriginal}
               className="border-2 border-black p-1 rounded-md hover:bg-red-300 cursor-pointer disabled:cursor-not-allowed"
