@@ -1,4 +1,16 @@
-function Task({ task, handleStatus }) {
+type Task = {
+  userId: number;
+  id: number;
+  title: string;
+  completed: boolean;
+};
+
+type TaskProps = {
+  task: Task;
+  handleStatus: (id: number, completed: boolean) => void;
+};
+
+function Task({ task, handleStatus }: TaskProps) {
   return (
     <tr>
       <td className="px-4 py-2 border-b">{task.title}</td>

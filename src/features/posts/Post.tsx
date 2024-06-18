@@ -1,13 +1,22 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { deletePost, updatePost } from "./postsSlice";
+import { useAppDispatch } from "../../hooks";
+import { Post as PostType } from "../../types/types";
 
-function Post({ post }) {
+type PostProps = {
+  post: PostType;
+};
+
+type ErrorObj = Record<string, string>;
+
+function Post({ post }: PostProps) {
   const [editedPost, setEditedPost] = useState({ ...post });
-  const [errors, setErrors] = useState({});
-  const dispatch = useDispatch();
+  const [errors, setErrors] = useState<ErrorObj>({});
+  const dispatch = useAppDispatch();
 
-  const handleChangePost = (e) => {
+  const handleChangePost = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setEditedPost({ ...editedPost, [name]: value });
   };
@@ -26,7 +35,7 @@ function Post({ post }) {
 
   useEffect(() => {
     function checkForErrors() {
-      const errorsObj = {};
+      const errorsObj: ErrorObj = {};
       if (!editedPost.title) errorsObj.title = "Title is required";
       if (!editedPost.body) errorsObj.body = "Body text is required";
 
@@ -50,7 +59,6 @@ function Post({ post }) {
         {errors.title && <span className="text-red-500">{errors.title}</span>}
         <h2 className="text-lg sm:text-xl font-semibold mb-2">Body:</h2>
         <textarea
-          type="text"
           name="body"
           value={editedPost.body}
           className="w-full h-[150px] text-center sm:h-[200px] p-2"

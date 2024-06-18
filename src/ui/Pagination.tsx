@@ -1,4 +1,16 @@
-function Pagination({ totalPages, currentPage, setCurrentPage }) {
+import React from "react";
+
+type PaginationProps = {
+  totalPages: number;
+  currentPage: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+};
+
+function Pagination({
+  totalPages,
+  currentPage,
+  setCurrentPage,
+}: PaginationProps) {
   return (
     <div className="flex mx-auto justify-center w-full">
       <div>

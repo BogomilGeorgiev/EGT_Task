@@ -1,5 +1,5 @@
 import User from "../features/users/User";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import {
   fetchUsers,
@@ -10,9 +10,10 @@ import {
 import Loader from "../ui/Loader";
 import LinkButton from "../ui/LinkButton";
 import { stateStatuses } from "../constants";
+import { useAppDispatch } from "../hooks";
 
 export default function Users() {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const users = useSelector(getUsers);
   const status = useSelector(getUsersStatus);
   const error = useSelector(getUsersError);

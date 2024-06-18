@@ -1,6 +1,11 @@
 import Post from "./Post";
+import { Post as PostType } from "../../types/types";
 
-function Posts({ posts }) {
+type PostsProps = {
+  posts: PostType[];
+};
+
+function Posts({ posts }: PostsProps) {
   return (
     <div className="ml-6">
       <h1 className="text-xl sm:text-2xl font-bold mb-3">Posts</h1>
@@ -10,8 +15,8 @@ function Posts({ posts }) {
         </div>
       ) : (
         <div className="space-y-4">
-          {posts.map((post) => (
-            <Post key={post.id} post={post} />
+          {posts.map((post, i) => (
+            <Post key={i} post={post} />
           ))}
         </div>
       )}

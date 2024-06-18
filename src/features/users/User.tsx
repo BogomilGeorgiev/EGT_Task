@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { revertToOriginal, updateUserData } from "./usersSlice";
+import { useAppDispatch } from "../../hooks";
+import { User as UserType } from "../../types/types";
 
-function User({ user }) {
-  const dispatch = useDispatch();
-  const [editUser, setEditUser] = useState({ ...user });
+type UserCardProps = {
+  user: UserType;
+};
+
+type ErrorObj = Record<string, string>;
+
+function User({ user }: UserCardProps) {
+  const dispatch = useAppDispatch();
+  const [editUser, setEditUser] = useState<UserType>({ ...user });
   const [isOpen, setIsOpen] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState<ErrorObj>({});
 
   const currentUrl = window.location.href;
   const isPostsPage = currentUrl.includes("posts");
@@ -19,7 +26,7 @@ function User({ user }) {
 
   useEffect(() => {
     function checkForErrors() {
-      const errorsObj = {};
+      const errorsObj: ErrorObj = {};
       if (!editUser.username) errorsObj.username = "Username is required";
       if (!editUser.email) errorsObj.email = "Email is required";
       if (!editUser.address.street) errorsObj.street = "Street is required";
@@ -31,13 +38,13 @@ function User({ user }) {
     checkForErrors();
   }, [editUser]);
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     if (name.includes(".")) {
-      const [field, secondField] = name.split(".");
+      const [field, secondField] = name.split(".") as [keyof UserType, string];
       setEditUser({
         ...editUser,
-        [field]: { ...editUser[field], [secondField]: value },
+        [field]: { ...(editUser[field] as object), [secondField]: value },
       });
     } else {
       setEditUser({ ...editUser, [name]: value });
@@ -54,14 +61,14 @@ function User({ user }) {
 
   function handleRevertToOriginal() {
     setEditUser(user);
-    setIsDisabled(false);
     dispatch(revertToOriginal({ id: user.id, originalData: user }));
+    setIsDisabled(false);
   }
 
   return (
     <div className="flex flex-col gap-3 border-2 p-2 m-3 w-full max-h-[600px] max-w-3xl">
       <div
-        onClick={isPostsPage ? null : () => setIsOpen(!isOpen)}
+        onClick={isPostsPage ? () => {} : () => setIsOpen(!isOpen)}
         className="border-b-4 p-3"
       >
         <h3 className="text-xl font-semibold cursor-pointer">{user.name}</h3>

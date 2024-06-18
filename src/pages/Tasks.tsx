@@ -13,13 +13,14 @@ import Task from "../features/tasks/Task";
 import Loader from "../ui/Loader";
 import Pagination from "../ui/Pagination";
 import LinkButton from "../ui/LinkButton";
+import { useAppDispatch, useAppSelector } from "../hooks";
 
 function Tasks() {
   const [currentPage, setCurrentPage] = useState(1);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const status = useSelector(getTasksStatus);
-  const tasks = useSelector(getTasks);
+  const tasks = useAppSelector(getTasks);
   const error = useSelector(getTasksError);
   const usersData = [...new Set(tasks.map((task) => task.userId))];
 
@@ -35,13 +36,15 @@ function Tasks() {
     }
   }, [dispatch, status]);
 
-  const handleFilterChange = (e) => {
+  const handleFilterChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFilter({ ...filter, [name]: value });
     setCurrentPage(1);
   };
 
-  const handleStatusChange = (taskId, completed) => {
+  const handleStatusChange = (taskId: number, completed: boolean) => {
     dispatch(updateTaskStatus({ id: taskId, completed }));
   };
 
@@ -108,7 +111,7 @@ function Tasks() {
           >
             <option value="all">All</option>
             {usersData.map((user, i) => (
-              <option key={i} value={user.id}>
+              <option key={i} value={user}>
                 {user}
               </option>
             ))}
@@ -127,7 +130,7 @@ function Tasks() {
             <tbody>
               {currentTasks.length === 0 ? (
                 <tr className="flex justify-center">
-                  <td colSpan="4" className="text-center font-bold py-3">
+                  <td className="text-center font-bold py-3">
                     No Tasks to show...
                   </td>
                 </tr>

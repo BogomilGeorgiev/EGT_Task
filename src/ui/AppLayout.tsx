@@ -4,7 +4,6 @@ import Loader from "./Loader";
 function AppLayout() {
   const navigation = useNavigation();
   const isLoading = navigation.state === "loading";
-  // check if px and py are needed
   return (
     <div className="flex flex-col min-h-screen items-center justify-center">
       {isLoading && <Loader />}

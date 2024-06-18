@@ -14,22 +14,24 @@ import {
 import Loader from "../ui/Loader";
 import { fetchUsers, getUsersStatus } from "../features/users/usersSlice";
 import { stateStatuses } from "../constants";
+import { RootState } from "../store";
+import { useAppDispatch } from "../hooks";
 
 function UserPosts() {
   const { userId } = useParams();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const posts = useSelector(getPosts);
   const postsStatus = useSelector(getFetchPostsStatus);
   const usersStatus = useSelector(getUsersStatus);
   const error = useSelector(getPostsError);
 
-  const user = useSelector((state) =>
+  const user = useSelector((state: RootState) =>
     state.users.users.find((user) => user.id === Number(userId))
   );
 
   useEffect(() => {
     if (postsStatus === stateStatuses.IDLE) {
-      dispatch(fetchPosts(userId));
+      dispatch(fetchPosts(Number(userId)));
     }
   }, [dispatch, userId, postsStatus]);
 
