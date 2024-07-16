@@ -5,9 +5,9 @@ import {
   createSlice,
 } from "@reduxjs/toolkit";
 import axios from "axios";
-import { stateStatuses } from "../../constants.js";
-import { RootState } from "../../store.js";
-import { Post as PostType } from "../../types/types.js";
+import { stateStatuses } from "../../constants";
+import { RootState } from "../../store";
+import { Post as PostType } from "../../types/types";
 
 type PostsState<PostsData> = {
   posts: PostsData;
@@ -31,10 +31,7 @@ export const fetchPosts = createAsyncThunk<PostType[], number>(
 export const updatePost = createAsyncThunk<PostType, PostType>(
   "posts/updatePost",
   async (post) => {
-    const res = await axios.put(
-      `https://jsonplaceholder.typicode.com/posts/${post.id}`,
-      post
-    );
+    const res = await axios.put(`${POSTS_URL}/${post.id}`, post);
     return res.data;
   }
 );

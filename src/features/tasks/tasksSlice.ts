@@ -42,7 +42,7 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-    updateTaskStatus: (state, action: PayloadAction<Task>) => {
+    updateTaskStatus: (state, action) => {
       const { id, completed } = action.payload;
       const task = state.tasks.find((task) => task.id === id);
       if (task) task.completed = completed;

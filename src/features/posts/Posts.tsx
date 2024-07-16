@@ -15,8 +15,8 @@ function Posts({ posts }: PostsProps) {
         </div>
       ) : (
         <div className="space-y-4">
-          {posts.map((post, i) => (
-            <Post key={i} post={post} />
+          {posts.map((post) => (
+            <Post key={post.id} post={post} />
           ))}
         </div>
       )}

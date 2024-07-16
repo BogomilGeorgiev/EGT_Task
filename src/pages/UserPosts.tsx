@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import Posts from "../features/posts/Posts";
 import User from "../features/users/User";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import LinkButton from "../ui/LinkButton";
 import { useEffect } from "react";
@@ -30,10 +30,8 @@ function UserPosts() {
   );
 
   useEffect(() => {
-    if (postsStatus === stateStatuses.IDLE) {
-      dispatch(fetchPosts(Number(userId)));
-    }
-  }, [dispatch, userId, postsStatus]);
+    dispatch(fetchPosts(Number(userId)));
+  }, [dispatch, userId]);
 
   useEffect(() => {
     if (usersStatus === stateStatuses.IDLE) {
